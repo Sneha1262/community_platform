@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Stack content vertically */
+        }
+
+        .header {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Form styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Link styles */
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Message under the form */
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-footer {
+            margin-top: 15px;
+        }
+
+        .form-footer p {
+            margin: 0;
+        }
+
+        .form-footer a {
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="header">Community Platform</div> <!-- Title added here -->
+
+    <div class="container">
+        <h2>Sign Up</h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Render the form fields -->
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p class="form-footer">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+</body>
+</html>
