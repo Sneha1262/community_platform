@@ -6,6 +6,7 @@ from myapp.forms import loginform, signupform ,eventform_1,edit_event_form,delet
 import pymysql
 import sys
 from myapp import models
+from myproject.settings import Database_Password  
 
 global_username="default"
 
@@ -18,7 +19,7 @@ conn = pymysql.connect(
 host= "database-1.cq3zzo5swvvt.us-east-1.rds.amazonaws.com", #endpoint link
         port = 3306, # 3306
         user = 'admin', # admin
-        password = 'adminireland', #adminadmin
+        password = Database_Password, #adminadmin
         db = 'communitydb', #test
         )
         
