@@ -5,8 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 from myapp.forms import loginform, signupform ,eventform_1,edit_event_form,delete_event_form # Assume these are your custom forms
 import pymysql
 import sys
+from myapp import models
 
 global_username="default"
+
+
+
+
+
 
 conn = pymysql.connect(
 host= "database-1.cq3zzo5swvvt.us-east-1.rds.amazonaws.com", #endpoint link
@@ -15,64 +21,7 @@ host= "database-1.cq3zzo5swvvt.us-east-1.rds.amazonaws.com", #endpoint link
         password = 'adminireland', #adminadmin
         db = 'communitydb', #test
         )
-
-def verify_and_delete(id, username):
-    global global_username
-    
-    
-    try:
-        cursor = conn.cursor()
-
         
-        if global_username.upper() == username.upper():
-            
-            query = f"DELETE FROM myapp_events_1 WHERE id = {id}"
-            
-            cursor.execute(query)
-            
-            conn.commit()
-            
-            cursor.close()
-            
-            return True 
-        else:
-            return False  
-    except Exception as e:
-        
-        print(f"Error during deletion: {e}")
-        return False  
-
-    
-        
-        
-    
-    
-
-
-def verify_and_update(id,username,eventname,eventdate,eventtime):
-    global global_username
-    
-    cursor = conn.cursor()
-    print(global_username)
-    print(username)
-    if global_username.upper() == username.upper():
-        query="""
-        update myapp_events_1 set username = %s , eventname = %s , eventdate = %s , eventtime= %s where id = %s
-        """
-         
-        values=(username,eventname,eventdate,eventtime,id)   
-
-        cursor.execute(query,values)
-        conn.commit()
-        cursor.close()
-        return True
-    else:
-        return False
-    
-     
-    
-
-    
 
 def save_events(username,eventname,eventdate,eventtime):
     
@@ -92,30 +41,9 @@ def save_events(username,eventname,eventdate,eventtime):
 
     
 
-def get_eventlist():
-    global global_username
-    cursor = conn.cursor()
-    
-    print(global_username)
-    
-    
-    cursor.execute(f"SELECT * FROM myapp_events_1 ")  # Replace 'yourapp_events' with your actual table name
-    rows = cursor.fetchall()  # Fetch all rows from the query result
-
-    # Create a list of dictionaries representing the rows
-    event_list = []
-    for row in rows:
-        event = {
-            'eventid': row[0],
-            'eventname': row[1],  # Assuming the first column is eventname
-            'eventdate': row[2],  # Assuming the second column is eventdate
-            'eventtime': row[3],  # Assuming the third column is eventtime
-        }
-        event_list.append(event)
-        
-    return event_list    
 
 def edit_events(request):
+    global global_username
     
     if request.method == 'POST':
         form = edit_event_form(request.POST)  
@@ -126,7 +54,7 @@ def edit_events(request):
             eventdate =form.cleaned_data['eventdate']
             eventtime =form.cleaned_data['eventtime']
            
-            if(verify_and_update(id,username,eventname,eventdate,eventtime)):
+            if(models.verify_and_update(id,username,eventname,eventdate,eventtime,global_username)):
                  return render(request, 'success.html')
             else:
                 return render(request,'failure.html') 
@@ -139,6 +67,7 @@ def edit_events(request):
 
 
 def delete_events(request):
+    global global_username
     if request.method == 'POST':
         
      print("entered for deletion")   
@@ -146,11 +75,13 @@ def delete_events(request):
      if form.is_valid():
          id        =form.cleaned_data['id']
          username  =form.cleaned_data['username']
+         
+         transactioned=models.verify_and_delete(id,username,global_username)
         
-         if(verify_and_delete(id,username)):
-              return render(request, 'success.html')
+         if(transactioned):
+               return render(request, 'success.html')
          else:
-             return render(request,'failure.html') 
+              return render(request,'failure.html') 
     
     form=delete_event_form()
     return render(request, 'deleteevents.html', {'form': form})
@@ -292,7 +223,7 @@ def addevents(request):
 def list_events(request):
     
     
-    event_list=get_eventlist()
+    event_list=models.get_eventlist()
     print(event_list)
     
     print("hi from list events")
