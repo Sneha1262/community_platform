@@ -15,18 +15,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-y)dsbu!v2$m_tz+sr5tcx74twd8!_acs0hx(h#myf89(&p_(du'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = []  # Add allowed hosts in production (e.g., ['yourdomain.com'])
 
 # Application definition
 
@@ -37,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp'
+    'myapp',  # Your custom app
 ]
 
 MIDDLEWARE = [
@@ -55,7 +50,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # You can specify template directories here
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,21 +67,14 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Using SQLite by default
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'communitydb',
-        'USER': 'admin',
-        'PASSWORD': 'adminireland',
-        'HOST': 'database-1.cq3zzo5swvvt.us-east-1.rds.amazonaws.com',
-        'PORT': 3306,
-       'OPTIONS': {
-            'ssl': {'ca': None},  # Disable SSL
-        },
+        'ENGINE': 'django.db.backends.sqlite3',  # Use SQLite database
+        'NAME': BASE_DIR / 'db.sqlite3',  # Path to the SQLite database file
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -128,3 +116,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
