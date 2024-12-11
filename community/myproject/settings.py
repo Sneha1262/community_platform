@@ -141,8 +141,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://myccommapp.eba-ssqubb3d.eu-west-1.elasticbeanstalk.com',
-    # Add any other domains you use for development or production
-]
+
 
